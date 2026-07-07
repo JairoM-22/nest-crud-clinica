@@ -25,17 +25,8 @@ export class Especialista {
     // Relación a doctor
     @ManyToOne(
         () => Doctor,
-        (doctor) => doctor.especialista,
+        (doctor) => doctor.id,
         {cascade: true}
     ) 
     doctor: Doctor
-
-    // DOCTOR.ENTITY
-    // Relación a especialista
-    // @OneToMany(
-    //     () => Especialista,
-    //     (especialista) => especialista.doctor,
-    //     {cascade: true}
-    // ) 
-    // especialista: Especialista[]
 }

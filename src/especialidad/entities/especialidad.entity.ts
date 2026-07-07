@@ -19,7 +19,7 @@ export class Especialidad {
     // Relación a especialista
     @OneToMany(
         () => Especialista,
-        (especialista) => especialista.especialidad,
+        (especialista) => especialista.especialidad_id,
         {cascade: true}
     ) 
     especialista: Especialista[];

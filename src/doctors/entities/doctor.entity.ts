@@ -1,4 +1,5 @@
-import { Column, PrimaryGeneratedColumn } from "typeorm";
+import { Especialista } from "src/especialista/entities/especialista.entity";
+import { Column, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 export class Doctor {
 
@@ -27,4 +28,11 @@ export class Doctor {
         unique: true,
     })
     numero_consultorio!: number;
+
+    @OneToMany(
+        () => Especialista,
+        (especialista) => especialista.doctor,
+        {cascade: true}
+    ) 
+    especialista: Especialista[]
 }
