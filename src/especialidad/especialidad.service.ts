@@ -55,4 +55,5 @@ export class EspecialidadService {
     throw new InternalServerErrorException('Unexpected error, check server logs');
 
   }
+  
 }
