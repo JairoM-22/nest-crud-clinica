@@ -33,4 +33,7 @@ export class Cita {
     @ManyToOne(() => Paciente, (paciente) => paciente.citas)
     @JoinColumn({ name: 'paciente_id' })
     paciente!: Paciente;
+
+
+    // uribe paraco
 }
