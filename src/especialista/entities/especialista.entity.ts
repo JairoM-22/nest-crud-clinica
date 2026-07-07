@@ -2,7 +2,7 @@ import { Doctor } from "src/doctors/entities/doctor.entity";
 import { Especialidad } from "src/especialidad/entities/especialidad.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
+@Entity({name: 'Especialista')
 export class Especialista {
     
     @PrimaryGeneratedColumn('uuid')
