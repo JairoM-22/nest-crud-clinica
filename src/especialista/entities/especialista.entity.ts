@@ -1,3 +1,4 @@
+import { Doctor } from "src/doctors/entities/doctor.entity";
 import { Especialidad } from "src/especialidad/entities/especialidad.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
@@ -20,4 +21,21 @@ export class Especialista {
         {cascade: true}
     ) 
     especialidad: Especialidad
+
+    // Relación a doctor
+    @ManyToOne(
+        () => Doctor,
+        (doctor) => doctor.especialista,
+        {cascade: true}
+    ) 
+    doctor: Doctor
+
+    // DOCTOR.ENTITY
+    // Relación a especialista
+    // @OneToMany(
+    //     () => Especialista,
+    //     (especialista) => especialista.doctor,
+    //     {cascade: true}
+    // ) 
+    // especialista: Especialista[]
 }
