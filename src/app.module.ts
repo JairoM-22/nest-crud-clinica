@@ -6,6 +6,7 @@ import { CitasModule } from './citas/citas.module';
 import { DoctorsModule } from './doctors/doctors.module';
 import { EspecialidadModule } from './especialidad/especialidad.module';
 import { RecetasModule } from './recetas/recetas.module';
+import { EspecialistaModule } from './especialista/especialista.module';
 
 @Module({
   imports: [ConfigModule.forRoot(),
@@ -30,7 +31,9 @@ import { RecetasModule } from './recetas/recetas.module';
 
     EspecialidadModule,
 
-    RecetasModule
+    RecetasModule,
+
+    EspecialistaModule
   ]
 })
 export class AppModule {}
