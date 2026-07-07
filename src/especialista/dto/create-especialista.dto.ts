@@ -1,13 +1,13 @@
 import { IsOptional, IsString, MinLength } from "class-validator";
 
-export class CreateEspecialidadDto {
+export class CreateEspecialistaDto {
     
     @IsString()
-    @MinLength(1)
-    nombre: string;
+    @IsOptional()
+    doctor_id?: string;
 
     @IsString()
     @IsOptional()
-    descripcion?: string;
+    especilidad_id?: string;
 
 }

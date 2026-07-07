@@ -1,11 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { CreateEspecialidadDto } from './dto/create-especialidad.dto';
 import { UpdateEspecialidadDto } from './dto/update-especialidad.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Especialidad } from './entities/especialidad.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class EspecialidadService {
-  create(createEspecialidadDto: CreateEspecialidadDto) {
-    return 'This action adds a new especialidad';
+
+  private readonly logger = new Logger('EspecialidadService');
+
+  constructor(
+    @InjectRepository(Especialidad)
+    private readonly especialidadRepository: Repository<Especialidad>
+  ){}
+
+
+  async create(createEspecialidadDto: CreateEspecialidadDto) {
+    try {
+      const especialidad = this.especialidadRepository.create(createEspecialidadDto)
+      await this.especialidadRepository.save( especialidad)
+
+      return especialidad;
+    } catch (error) {
+        this.handleDBExceptions(error)
+    }
   }
 
   findAll() {
@@ -23,4 +42,18 @@ export class EspecialidadService {
   remove(id: number) {
     return `This action removes a #${id} especialidad`;
   }
+
+
+  //HANDLE DATABASE EXCEPTIONS
+  private handleDBExceptions( error: any ) {
+
+    if ( error.code === '23505' )
+      throw new BadRequestException(error.detail);
+    
+    this.logger.error(error)
+    // console.log(error)
+    throw new InternalServerErrorException('Unexpected error, check server logs');
+
+  }
+  
 }
