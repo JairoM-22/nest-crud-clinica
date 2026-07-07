@@ -1,24 +1,20 @@
-import { IsString, IsEmail,MinLength, IsDate } from 'class-validator';
+import { IsString, IsEmail, MinLength, IsDate, IsOptional } from 'class-validator';
 
 export class CreatePacienteDto {
+    @IsString()
+    @MinLength(1)
+    nombre!: string;
 
-    id!:string
+    @IsEmail()
+    correo!: string;
 
+    @IsString()
+    @IsOptional()
+    telefono?: string;
 
-    @isString()
-    nombre!:string
-
-    @Column()  
-    correo!:string
-
-    @Column()
-    telefono!:string
-
-    @Column()
-    fecha_nacimiento!:Date
-
-    @CreateDateColumn({ type: 'timestamp', name: 'fecha_registro' })
-    fechaRegistro!: Date;
+    @IsDate()
+    @IsOptional()
+    fecha_nacimiento?: Date;
 }
 
 

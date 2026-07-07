@@ -1,29 +1,30 @@
-import { Timestamp } from "typeorm/driver/mongodb/bson.typings.js"
-import {Column,Entity,OneToMany ,PrimaryGeneratedColumn,CreateDateColumn} from 'typeorm'  
-import { IsString, IsEmail,MinLength, IsDate } from 'class-validator';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import { IsString, IsEmail, MinLength, IsDate } from 'class-validator';
+import { Cita } from '../../citas/entities/cita.entity';
 
-@Entity({name: 'products'})
+@Entity({ name: 'paciente' })
 export class Paciente {
     @PrimaryGeneratedColumn()
-    id!:string
-
+    id!: number;
 
     @IsString()
     @MinLength(1)
-    nombre!:string
+    nombre!: string;
 
     @IsEmail()
     @MinLength(1)  
-    correo!:string
+    correo!: string;
 
     @IsString()
     @MinLength(1)
-    telefono!:string
+    telefono!: string;
 
     @IsDate()
-    @MinLength(1)
-    fecha_nacimiento!:Date
+    fecha_nacimiento!: Date;
 
     @CreateDateColumn({ type: 'timestamp', name: 'fecha_registro' })
     fechaRegistro!: Date;
+
+    @OneToMany(() => Cita, (cita) => cita.paciente)
+    citas!: Cita[];
 }
