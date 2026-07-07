@@ -1,5 +1,7 @@
-import { Column, CreateDateColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Cita } from "src/citas/entities/cita.entity";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
 
+@Entity({name: 'receta'})
 export class Receta {
 
     @PrimaryGeneratedColumn('uuid')
@@ -26,7 +28,12 @@ export class Receta {
     @CreateDateColumn({
             type: 'timestamp',
     })
-   fecha_emision!: Date;
+    fecha_emision!: Date;
 
+    @ManyToOne(()=>Cita, (Cita)=> Cita.id,{
+        cascade: true,
+        eager: true,
+    })
+    cita!: Cita;
 
 }

@@ -1,8 +1,10 @@
-import { Column, CreateDateColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
 import { cita_estado } from "./cita_estado.enum";
+import { Receta } from 'src/recetas/entities/receta.entity';
+import { Doctor } from 'src/doctors/entities/doctor.entity';
 
 
-
+@Entity({name: 'Cita'})
 export class Cita {
 
     @PrimaryGeneratedColumn('uuid')
@@ -35,6 +37,18 @@ export class Cita {
     estado!: cita_estado;
 
 
+
+    @OneToMany(() => Receta,
+        (receta) => receta.cita_id, {
+        eager: true,
+    })
+    recetas!: Receta[];
+
+    @ManyToOne(() => Doctor,
+    (Doctor) => Doctor.id,{
+        eager:true
+    })
+    doctor!: Doctor;
 
 
 }
