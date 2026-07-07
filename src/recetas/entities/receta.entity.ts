@@ -1,4 +1,6 @@
-import { Column, CreateDateColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Cita } from "src/citas/entities/cita.entity";
+import { Especialista } from "src/especialistas/entities/especialista.entity";
+import { Column, CreateDateColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 export class Receta {
 
@@ -27,6 +29,19 @@ export class Receta {
             type: 'timestamp',
     })
    fecha_emision!: Date;
+
+   @ManyToOne(()=>Cita, (Cita)=> Cita.id,{
+        cascade: true,
+        eager: true,
+    })
+    cita!: Cita;
+
+    @OneToMany(
+        () => Especialista,
+        (especialista) => especialista.doctor,
+        {cascade: true}
+    ) 
+    especialista: Especialista[]
 
 
 }
