@@ -1,47 +1,28 @@
-import { Cita } from "src/citas/entities/cita.entity";
-import { Especialista } from "src/especialista/entities/especialista.entity";
-import { Column, CreateDateColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Cita } from '../../citas/entities/cita.entity';
 
+@Entity({ name: 'receta' })
 export class Receta {
 
-    @PrimaryGeneratedColumn('uuid')
-    id!: string;
-
+    @PrimaryGeneratedColumn()
+    id!: number;
 
     @Column('int')
     cita_id!: number;
 
-    
-    @Column('text',{
-        nullable:false
-    })
+    @Column('text', { nullable: false })
     medicamento!: string;
 
-    @Column('text',{
-        nullable:false
-    })
+    @Column('text', { nullable: false })
     dosis!: string;
 
     @Column('text')
     instruccion!: string;
 
-    @CreateDateColumn({
-            type: 'timestamp',
-    })
-   fecha_emision!: Date;
+    @CreateDateColumn({ type: 'timestamp', name: 'fecha_emision' })
+    fecha_emision!: Date;
 
-   @ManyToOne(()=>Cita, (Cita)=> Cita.id,{
-        cascade: true,
-        eager: true,
-    })
+    @ManyToOne(() => Cita, (cita) => cita.recetas)
+    @JoinColumn({ name: 'cita_id' })
     cita!: Cita;
-
-    @OneToMany(
-        () => Especialista,
-        (especialista) => especialista.doctor,
-        {cascade: true}
-    ) 
-    especialista: Especialista[]
-
-
 }

@@ -7,18 +7,21 @@ export class Paciente {
     @PrimaryGeneratedColumn()
     id!: number;
 
+    @Column('varchar')
     @IsString()
     @MinLength(1)
     nombre!: string;
 
+    @Column('varchar', { unique: true })
     @IsEmail()
     @MinLength(1)  
     correo!: string;
 
+    @Column('varchar', { nullable: true })
     @IsString()
-    @MinLength(1)
     telefono!: string;
 
+    @Column('date', { nullable: true })
     @IsDate()
     fecha_nacimiento!: Date;
 

@@ -1,13 +1,13 @@
-import { IsOptional, IsString, MinLength } from "class-validator";
+import { IsOptional, IsInt } from "class-validator";
 
 export class CreateEspecialistaDto {
     
-    @IsString()
+    @IsInt()
     @IsOptional()
-    doctor_id?: string;
+    doctor_id?: number;
 
-    @IsString()
+    @IsInt()
     @IsOptional()
-    especilidad_id?: string;
+    especialidad_id?: number;
 
 }

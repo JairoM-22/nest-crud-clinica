@@ -1,15 +1,14 @@
-import { Especialista } from "src/especialista/entities/especialista.entity";
+import { Especialista } from "../../especialista/entities/especialista.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({ name: 'Doctor' })
+@Entity({ name: 'doctor' })
 export class Doctor {
 
-    @PrimaryGeneratedColumn('uuid')
-    id!: string;
+    @PrimaryGeneratedColumn()
+    id!: number;
 
     @Column('text', {
-        unique: true,
-        nullable:false,
+        nullable: false,
     })
     nombre!: string;    
 
@@ -31,7 +30,7 @@ export class Doctor {
     @OneToMany(
         () => Especialista,
         (especialista) => especialista.doctor,
-        {cascade: true}
+        { cascade: true }
     ) 
     especialista: Especialista[]
 }

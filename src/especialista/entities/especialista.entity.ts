@@ -2,17 +2,17 @@ import { Doctor } from "src/doctors/entities/doctor.entity";
 import { Especialidad } from "src/especialidad/entities/especialidad.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({name: 'Especialista'})
+@Entity({name: 'especialista'})
 export class Especialista {
     
-    @PrimaryGeneratedColumn('uuid')
-    id!: string;
+    @PrimaryGeneratedColumn()
+    id!: number;
 
-    @Column('text')
-    doctor_id!: string;
+    @Column('int')
+    doctor_id!: number;
 
-    @Column('text')
-    especialidad_id!: string;
+    @Column('int')
+    especialidad_id!: number;
 
     // Relación a especialidad
     @ManyToOne(
