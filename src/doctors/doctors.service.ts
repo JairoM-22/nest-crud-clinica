@@ -22,29 +22,17 @@ export class DoctorsService {
 
   async getCitas() {
     return await this.doctorRepository.manager.getRepository(Cita)
-      .createQueryBuilder('cita')
-      .innerJoin('cita.doctor', 'doctor')
-      .select('doctor.nombre', 'doctor')
-      .addSelect('COUNT(cita.id)', 'citas')
-      .groupBy('doctor.nombre')
-      .orderBy('citas', 'DESC')
-      .getRawMany();
+      .createQueryBuilder('cita').innerJoin('cita.doctor', 'doctor').select('doctor.nombre', 'doctor')
+      .addSelect('COUNT(cita.id)', 'citas').groupBy('doctor.nombre')
+      .orderBy('citas', 'DESC').getRawMany();
   }
 
   async getEstadisticas() {
     return await this.doctorRepository
-      .createQueryBuilder('doctor')
-      .leftJoin('doctor.citas', 'cita')
-      .leftJoin('cita.recetas', 'receta')
-      .select([
-        'doctor.id',
-        'doctor.nombre',
-      ])
-      .addSelect('COUNT(receta.id)', 'totalRecetas')
-      .addSelect('AVG(receta.id)', 'promedioRecetas')
-      .addSelect('MAX(cita.fecha)', 'ultimaCita')
-      .groupBy('doctor.id')
-      .getRawMany();
+      .createQueryBuilder('doctor').leftJoin('doctor.citas', 'cita').leftJoin('cita.recetas', 'receta')
+      .select(['doctor.id','doctor.nombre',]).addSelect('COUNT(receta.id)', 'totalRecetas')
+      .addSelect('AVG(receta.id)', 'promedioRecetas').addSelect('MAX(cita.fecha)', 'ultimaCita')
+      .groupBy('doctor.id').getRawMany();
   }
 
   async getCitasSobrePromedio() {
@@ -59,29 +47,14 @@ export class DoctorsService {
       }, 'promedio');
 
     return await this.doctorRepository
-      .createQueryBuilder('doctor')
-      .leftJoin('doctor.citas', 'cita')
-      .select([
-        'doctor.id',
-        'doctor.nombre',
-      ])
-      .addSelect('COUNT(cita.id)', 'totalCitas')
-      .groupBy('doctor.id')
-      .having(`COUNT(cita.id) > (${subQuery.getQuery()})`)
-      .getRawMany();
+      .createQueryBuilder('doctor').leftJoin('doctor.citas', 'cita').select([    'doctor.id', 'doctor.nombre',])
+      .addSelect('COUNT(cita.id)', 'totalCitas').groupBy('doctor.id')
+      .having(`COUNT(cita.id) > (${subQuery.getQuery()})`).getRawMany();
   }
 
   async getDoctoresPorEspecialidad() {
     return await this.doctorRepository
-      .createQueryBuilder('doctor')
-      .leftJoin('doctor.especialista', 'especialista')
-      .leftJoin('especialista.especialidad', 'especialidad')
-      .select([
-        'doctor.id',
-        'doctor.nombre',
-        'especialidad.id',
-        'especialidad.nombre',
-      ])
+      .createQueryBuilder('doctor').leftJoin('doctor.especialista', 'especialista').leftJoin('especialista.especialidad', 'especialidad').select(['doctor.id','doctor.nombre','especialidad.id','especialidad.nombre',])
       .getMany();
   }
 

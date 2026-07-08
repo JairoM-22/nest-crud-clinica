@@ -22,30 +22,16 @@ export class CitasService {
   async getPendientes() {
     return await this.citaRepository
       .createQueryBuilder('cita')
-      .innerJoin('cita.paciente', 'paciente')
-      .innerJoin('cita.doctor', 'doctor')
-      .select([
-        'paciente.nombre',
-        'doctor.nombre',
-        'cita.fecha',
-        'cita.hora',
-      ])
-      .where('cita.estado = :estado', {
-        estado: 'pendiente',
-      })
-      .getRawMany();
+      .innerJoin('cita.paciente', 'paciente').innerJoin('cita.doctor', 'doctor')
+      .select(['paciente.nombre','doctor.nombre','cita.fecha','cita.hora',])
+      .where('cita.estado = :estado', {estado: 'pendiente',}).getRawMany();
   }
 
   async getMarzoControl() {
     return await this.citaRepository
       .createQueryBuilder('cita')
-      .where('cita.fecha BETWEEN :inicio AND :fin', {
-        inicio: '2024-03-01',
-        fin: '2024-03-30',
-      })
-      .andWhere('LOWER(cita.motivo_consulta) LIKE LOWER(:motivo)', {
-        motivo: '%control%',
-      })
+      .where('cita.fecha BETWEEN :inicio AND :fin', {inicio: '2024-03-01',fin: '2024-03-30',})
+      .andWhere('LOWER(cita.motivo_consulta) LIKE LOWER(:motivo)', {motivo: '%control%',})
       .getMany();
   }
 

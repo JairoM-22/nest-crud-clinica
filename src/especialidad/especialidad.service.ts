@@ -33,16 +33,8 @@ export class EspecialidadService {
 
   async getConMultiplesDoctores() {
     return await this.especialidadRepository
-      .createQueryBuilder('especialidad')
-      .innerJoin('especialidad.especialista', 'especialista')
-      .select('especialidad.nombre', 'especialidad')
-      .addSelect('COUNT(especialista.id)', 'cantidadDoctores')
-      .groupBy('especialidad.id')
-      .having('COUNT(especialista.id) >= :cantidad', {
-        cantidad: 2,
-      })
-      .orderBy('cantidadDoctores', 'DESC')
-      .getRawMany();
+      .createQueryBuilder('especialidad').innerJoin('especialidad.especialista', 'especialista').select('especialidad.nombre', 'especialidad').addSelect('COUNT(especialista.id)', 'cantidadDoctores')
+      .groupBy('especialidad.id').having('COUNT(especialista.id) >= :cantidad', {cantidad: 2,}).orderBy('cantidadDoctores', 'DESC').getRawMany();
   }
 
   findOne(id: number) {

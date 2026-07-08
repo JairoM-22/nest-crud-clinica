@@ -22,18 +22,14 @@ export class RecetasService {
 
   async removeCitasCanceladas() {
     const subQuery = this.recetaRepository.manager
-      .createQueryBuilder(Cita, 'c')
-      .select('c.id')
+      .createQueryBuilder(Cita, 'c').select('c.id')
       .where('c.estado = :estado')
       .getQuery();
 
     return await this.recetaRepository
-      .createQueryBuilder()
-      .delete()
-      .from(Receta)
-      .where(`cita_id IN (${subQuery})`)
-      .setParameter('estado', 'cancelada')
-      .execute();
+      .createQueryBuilder().delete()
+      .from(Receta).where(`cita_id IN (${subQuery})`)
+      .setParameter('estado', 'cancelada').execute();
   }
 
   findOne(id: number) {
