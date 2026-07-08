@@ -23,7 +23,7 @@ export class Doctor {
     })
     telefono!: string;
 
-    @Column('int', {
+    @Column('text', {
         unique: true,
     })
     numero_consultorio!: number;
