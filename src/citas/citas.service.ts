@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateCitaDto } from './dto/create-cita.dto';
 import { UpdateCitaDto } from './dto/update-cita.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,41 +13,49 @@ export class CitasService {
     private readonly citaRepository: Repository<Cita>,
   ) {}
   async create(createCitaDto: CreateCitaDto) {
-
     try {
-
       const citas = this.citaRepository.create(createCitaDto);
       await this.citaRepository.save( citas );
-
       return citas;
-
     } catch (error) {
       console.log(error)
       throw new InternalServerErrorException('Ayuda!')
     }
-
-    return 'This action adds a new cita';
   }
 
   findAll() {
     return this.citaRepository.find();
   }
 
-  findOne(id: number) {
-    return this.citaRepository.findOne({where: {id}});
+  async findOne(id: number) {
+
+    const cita = await this.citaRepository.findOne({where: {id}});
+
+    if(!cita) throw new NotFoundException(`Product with ${ id } was not found ` );
+
+
+    return cita;
   }
 
-  update(id: number, updateCitaDto: UpdateCitaDto) {
-    return `This action updates a #${id} cita`;
+  async update(id: number, updateCitaDto: UpdateCitaDto) {
+
+    const cita = await this.citaRepository.preload({
+      id: id,
+      ...updateCitaDto
+    });
+
+    if ( !cita ) throw new NotFoundException(`Product with ${ id } was not found ` );
+
+
+    return  this.citaRepository.save( cita );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} cita`;
+  async remove(id: number) {
+    const cita = await this.findOne(id);
+
+    await this.citaRepository.remove( cita );
   }
-
-
-
-
+ 
   async getPendientes() {
     return await this.citaRepository
       .createQueryBuilder('cita')
