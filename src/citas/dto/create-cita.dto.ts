@@ -5,7 +5,8 @@ import { cita_estado } from "../entities/cita_estado.enum";
 export class CreateCitaDto {
 
     @IsInt()
-    id!: number;
+    @IsOptional()
+    id?: number;
     
     @IsOptional()
     @IsInt()
@@ -27,6 +28,7 @@ export class CreateCitaDto {
     @IsString()
     motivo_consulta?: string;
     
+    @IsOptional()
     @IsEnum(cita_estado)
     estado?:cita_estado;
 

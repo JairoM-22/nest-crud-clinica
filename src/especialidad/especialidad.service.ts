@@ -19,7 +19,7 @@ export class EspecialidadService {
   async create(createEspecialidadDto: CreateEspecialidadDto) {
     try {
       const especialidad = this.especialidadRepository.create(createEspecialidadDto)
-      await this.especialidadRepository.save( especialidad)
+      await this.especialidadRepository.save( especialidad )
 
       return especialidad;
     } catch (error) {
