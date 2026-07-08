@@ -6,27 +6,27 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 export class Especialista {
     
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    id!: string;
 
     @Column('text')
-    doctor_id: string;
+    doctor_id!: string;
 
     @Column('text')
-    especialidad_id: string;
+    especialidad_id!: string;
 
     // Relación a especialidad
     @ManyToOne(
         () => Especialidad,
         (especialidad) => especialidad.especialista,
-        {cascade: true}
+        
     ) 
-    especialidad: Especialidad
+    especialidad!: Especialidad
 
     // Relación a doctor
     @ManyToOne(
         () => Doctor,
-        (doctor) => doctor.id,
-        {cascade: true}
+        (doctor) => doctor.especialista,
+        
     ) 
-    doctor: Doctor
+    doctor!: Doctor
 }

@@ -1,26 +1,25 @@
-import { Especialista } from "src/especialista/entities/especialista.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Especialista } from "../../especialista/entities/especialista.entity";
 
-@Entity()
+@Entity({ name: 'especialidad' })
 export class Especialidad {
     
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+    @PrimaryGeneratedColumn()
+    id!: number;
 
     @Column('text')
-    nombre: string;
+    nombre!: string;
 
     @Column({
         type: 'text',
         nullable: true
     })
-    descripcion: string;
+    descripcion!: string;
 
-    // Relación a especialista
     @OneToMany(
         () => Especialista,
-        (especialista) => especialista.especialidad_id,
-        {cascade: true}
+        (especialista) => especialista.especialidad,
+        { cascade: true }
     ) 
-    especialista: Especialista[];
+    especialista!: Especialista[];
 }
