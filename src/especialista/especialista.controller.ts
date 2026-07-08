@@ -23,8 +23,11 @@ export class EspecialistaController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEspecialistaDto: UpdateEspecialistaDto) {
-    return this.especialistaService.update(+id, updateEspecialistaDto);
+  update(
+    @Param('id') id: number, 
+    @Body() updateEspecialistaDto: UpdateEspecialistaDto
+  ) {
+    return this.especialistaService.update(id, updateEspecialistaDto);
   }
 
   @Delete(':id')

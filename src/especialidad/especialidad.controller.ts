@@ -28,8 +28,11 @@ export class EspecialidadController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEspecialidadDto: UpdateEspecialidadDto) {
-    return this.especialidadService.update(+id, updateEspecialidadDto);
+  update(
+    @Param('id') id: number, 
+    @Body() updateEspecialidadDto: UpdateEspecialidadDto
+  ) {
+    return this.especialidadService.update(id, updateEspecialidadDto);
   }
 
   @Delete(':id')

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
@@ -14,18 +14,18 @@ export class DoctorsService {
   constructor(
     @InjectRepository(Doctor)
     private readonly doctorRepository: Repository<Doctor>,
-  ) {}
+  ) { }
 
   async create(createDoctorDto: CreateDoctorDto) {
-      try {
-        const doctor = this.doctorRepository.create(createDoctorDto)
-        await this.doctorRepository.save( doctor )
-  
-        return doctor;
-      } catch (error) {
-          this.handleDBExceptions(error)
-      }
+    try {
+      const doctor = this.doctorRepository.create(createDoctorDto)
+      await this.doctorRepository.save(doctor)
+
+      return doctor;
+    } catch (error) {
+      this.handleDBExceptions(error)
     }
+  }
 
   findAll() {
     return this.doctorRepository.find();
@@ -41,7 +41,7 @@ export class DoctorsService {
   async getEstadisticas() {
     return await this.doctorRepository
       .createQueryBuilder('doctor').leftJoin('doctor.citas', 'cita').leftJoin('cita.recetas', 'receta')
-      .select(['doctor.id','doctor.nombre',]).addSelect('COUNT(receta.id)', 'totalRecetas')
+      .select(['doctor.id', 'doctor.nombre',]).addSelect('COUNT(receta.id)', 'totalRecetas')
       .addSelect('AVG(receta.id)', 'promedioRecetas').addSelect('MAX(cita.fecha)', 'ultimaCita')
       .groupBy('doctor.id').getRawMany();
   }
@@ -58,35 +58,50 @@ export class DoctorsService {
       }, 'promedio');
 
     return await this.doctorRepository
-      .createQueryBuilder('doctor').leftJoin('doctor.citas', 'cita').select([    'doctor.id', 'doctor.nombre',])
+      .createQueryBuilder('doctor').leftJoin('doctor.citas', 'cita').select(['doctor.id', 'doctor.nombre',])
       .addSelect('COUNT(cita.id)', 'totalCitas').groupBy('doctor.id')
       .having(`COUNT(cita.id) > (${subQuery.getQuery()})`).getRawMany();
   }
 
   async getDoctoresPorEspecialidad() {
     return await this.doctorRepository
-      .createQueryBuilder('doctor').leftJoin('doctor.especialista', 'especialista').leftJoin('especialista.especialidad', 'especialidad').select(['doctor.id','doctor.nombre','especialidad.id','especialidad.nombre',])
+      .createQueryBuilder('doctor').leftJoin('doctor.especialista', 'especialista').leftJoin('especialista.especialidad', 'especialidad').select(['doctor.id', 'doctor.nombre', 'especialidad.id', 'especialidad.nombre',])
       .getMany();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} doctor`;
+    return this.doctorRepository.findOne({ where: { id } });
   }
 
-  update(id: number, updateDoctorDto: UpdateDoctorDto) {
-    return `This action updates a #${id} doctor`;
+  async update(id: number, updateDoctorDto: UpdateDoctorDto) {
+
+    const doctor = await this.doctorRepository.preload({
+      id: id,
+      ...updateDoctorDto
+    })
+
+    if (!doctor) throw new NotFoundException(`Doctor con id: ${id} no fue encontrado`)
+
+    try {
+      await this.doctorRepository.save(doctor);
+      return doctor;
+    } catch (error) {
+      this.handleDBExceptions(error)
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} doctor`;
+  async remove(id: number) {
+    const doctor = await this.findOne(id);
+    if (!doctor) throw new NotFoundException(`Doctor con id: ${id} no fue encontrado`);
+    await this.doctorRepository.remove(doctor);
   }
 
   //HANDLE DATABASE EXCEPTIONS
-  private handleDBExceptions( error: any ) {
+  private handleDBExceptions(error: any) {
 
-    if ( error.code === '23505' )
+    if (error.code === '23505')
       throw new BadRequestException(error.detail);
-    
+
     this.logger.error(error)
     // console.log(error)
     throw new InternalServerErrorException('Unexpected error, check server logs');

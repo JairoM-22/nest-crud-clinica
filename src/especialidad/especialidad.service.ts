@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { CreateEspecialidadDto } from './dto/create-especialidad.dto';
 import { UpdateEspecialidadDto } from './dto/update-especialidad.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -38,15 +38,30 @@ export class EspecialidadService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} especialidad`;
+    return this.especialidadRepository.findOne({where: {id}});
   }
 
-  update(id: number, updateEspecialidadDto: UpdateEspecialidadDto) {
-    return `This action updates a #${id} especialidad`;
-  }
+  async update(id: number, updateEspecialidadDto: UpdateEspecialidadDto) {
+  
+      const especialidad = await this.especialidadRepository.preload({
+        id: id,
+        ...updateEspecialidadDto
+      })
+  
+      if (!especialidad) throw new NotFoundException(`Especialidad con id: ${id} no fue encontrado`)
+  
+      try {
+        await this.especialidadRepository.save(especialidad);
+        return especialidad;
+      } catch (error) {
+        this.handleDBExceptions(error)
+      }
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} especialidad`;
+  async remove(id: number) {
+    const especialidad = await this.findOne(id);
+    if (!especialidad) throw new NotFoundException(`Especialidad con id: ${id} no fue encontrado`);
+    await this.especialidadRepository.remove(especialidad);
   }
 
 
