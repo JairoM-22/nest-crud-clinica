@@ -1,5 +1,5 @@
 import { Cita } from "src/citas/entities/cita.entity";
-import { Especialista } from "src/especialistas/entities/especialista.entity";
+import { Especialista } from "src/especialista/entities/especialista.entity";
 import { Column, CreateDateColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 export class Receta {
