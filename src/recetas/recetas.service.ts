@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Body, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateRecetaDto } from './dto/create-receta.dto';
@@ -12,12 +12,21 @@ export class RecetasService {
     @InjectRepository(Receta)
     private readonly recetaRepository: Repository<Receta>,
   ) {}
-  create(createRecetaDto: CreateRecetaDto) {
-    return 'This action adds a new receta';
-  }
+
+    async create(CreateRecetaDto: CreateRecetaDto) {
+      try {
+
+        const Receta = this.recetaRepository.create(CreateRecetaDto);
+        await this.recetaRepository.save( Receta );
+        return Receta;
+      } catch (error) {
+        console.log(error)
+        throw new InternalServerErrorException('Ayuda!')
+      }
+    }
 
   findAll() {
-    return `This action returns all recetas`;
+    return this.recetaRepository.find();
   }
 
   async removeCitasCanceladas() {
@@ -32,15 +41,28 @@ export class RecetasService {
       .setParameter('estado', 'cancelada').execute();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} receta`;
+  async findOne(id: number) {
+    const receta = await this.recetaRepository.findOne({where : {id}});
+
+    if(!receta) throw new NotFoundException(`Receta with id ${ id } was not found`);
+
+    return receta;
   }
 
-  update(id: number, updateRecetaDto: UpdateRecetaDto) {
-    return `This action updates a #${id} receta`;
+  async update(id: number, updateRecetaDto: UpdateRecetaDto) {
+    const receta = await this.recetaRepository.preload({
+      id: id,
+      ...updateRecetaDto
+    })
+
+    if(!receta) throw new NotFoundException(`Receta with id ${ id } was not found`);
+
+    return this.recetaRepository.save(receta);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} receta`;
+  async remove(id: number) {
+    const receta = await this.findOne( id );
+
+    await this.recetaRepository.remove(receta);
   }
 }
