@@ -7,7 +7,7 @@ import { Doctor } from "../../doctors/entities/doctor.entity";
 @Entity({ name: 'cita' })
 export class Cita {
 
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn()
     id?: number;
 
     @Column('int')
