@@ -93,7 +93,12 @@ export class DoctorsService {
   async remove(id: number) {
     const doctor = await this.findOne(id);
     if (!doctor) throw new NotFoundException(`Doctor con id: ${id} no fue encontrado`);
-    await this.doctorRepository.remove(doctor);
+
+    try {
+      await this.doctorRepository.remove(doctor);
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
   }
 
   //HANDLE DATABASE EXCEPTIONS
@@ -101,6 +106,13 @@ export class DoctorsService {
 
     if (error.code === '23505')
       throw new BadRequestException(error.detail);
+
+    // Violación de llave foránea: el doctor todavía tiene citas y/o
+    // especialidades asociadas, así que Postgres bloquea el borrado.
+    if (error.code === '23503')
+      throw new BadRequestException(
+        'No se puede eliminar el doctor porque tiene citas y/o especialidades asociadas. Elimina o reasigna esos registros primero.'
+      );
 
     this.logger.error(error)
     // console.log(error)

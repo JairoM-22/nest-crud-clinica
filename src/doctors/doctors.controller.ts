@@ -44,10 +44,10 @@ export class DoctorsController {
 
   @Patch(':id')
   update(
-    @Param('id') id: number, 
+    @Param('id') id: string, 
     @Body() updateDoctorDto: UpdateDoctorDto
   ) {
-    return this.doctorsService.update(id, updateDoctorDto);
+    return this.doctorsService.update(+id, updateDoctorDto);
   }
 
   @Delete(':id')

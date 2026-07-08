@@ -24,10 +24,10 @@ export class EspecialistaController {
 
   @Patch(':id')
   update(
-    @Param('id') id: number, 
+    @Param('id') id: string, 
     @Body() updateEspecialistaDto: UpdateEspecialistaDto
   ) {
-    return this.especialistaService.update(id, updateEspecialistaDto);
+    return this.especialistaService.update(+id, updateEspecialistaDto);
   }
 
   @Delete(':id')
