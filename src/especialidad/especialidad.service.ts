@@ -28,7 +28,7 @@ export class EspecialidadService {
   }
 
   findAll() {
-    return `This action returns all especialidad`;
+    return this.especialidadRepository.find();
   }
 
   async getConMultiplesDoctores() {
