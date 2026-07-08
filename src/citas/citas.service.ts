@@ -12,11 +12,15 @@ export class CitasService {
     @InjectRepository(Cita)
     private readonly citaRepository: Repository<Cita>,
   ) {}
-  create(createCitaDto: CreateCitaDto) {
+  async create(createCitaDto: CreateCitaDto) {
 
     try {
-      
-      
+
+      const citas = this.citaRepository.create(createCitaDto);
+      await this.citaRepository.save( citas );
+
+      return citas;
+
     } catch (error) {
       console.log(error)
       throw new InternalServerErrorException('Ayuda!')
@@ -26,7 +30,7 @@ export class CitasService {
   }
 
   findAll() {
-    return `This action returns all citas`;
+    return this.citaRepository.find();
   }
 
   findOne(id: number) {

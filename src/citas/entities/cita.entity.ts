@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, PrimaryColumn } from "typeorm";
 import { cita_estado } from "./cita_estado.enum";
 import { Paciente } from "../../pacientes/entities/paciente.entity";
 import { Receta } from "../../recetas/entities/receta.entity";
@@ -7,30 +7,30 @@ import { Doctor } from "../../doctors/entities/doctor.entity";
 @Entity({ name: 'cita' })
 export class Cita {
 
-    @PrimaryGeneratedColumn()
-    id!: number;
+    @PrimaryColumn()
+    id?: number;
 
     @Column('int')
-    paciente_id!: number;
+    paciente_id?: number;
 
     @Column('int')
-    doctor_id!: number;
+    doctor_id?: number;
 
     @Column({ type: 'date' })
-    fecha!: Date;
+    fecha?: Date;
 
     @Column({ type: 'time' })
-    hora!: string;
+    hora?: string;
 
     @Column('text')
-    motivo_consulta!: string;
+    motivo_consulta?: string;
 
     @Column({
         type: 'enum',
         enum: cita_estado,
         default: cita_estado.PENDIENTE,
     })
-    estado!: cita_estado;
+    estado?: cita_estado;
 
     @ManyToOne(() => Paciente, (paciente) => paciente.citas)
     @JoinColumn({ name: 'paciente_id' })
