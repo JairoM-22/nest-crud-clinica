@@ -1,6 +1,7 @@
 import { Especialista } from "src/especialista/entities/especialista.entity";
-import { Column, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
+@Entity({ name: 'Doctor' })
 export class Doctor {
 
     @PrimaryGeneratedColumn('uuid')
@@ -12,12 +13,10 @@ export class Doctor {
     })
     nombre!: string;    
 
-
     @Column('text', {
         unique: true,
     })
     correo!: string;  
-    
     
     @Column('text', {
         unique: true,
