@@ -12,6 +12,11 @@ export class EspecialidadController {
     return this.especialidadService.create(createEspecialidadDto);
   }
 
+  @Get('con-multiples-doctores')
+  getConMultiplesDoctores() {
+    return this.especialidadService.getConMultiplesDoctores();
+  }
+
   @Get()
   findAll() {
     return this.especialidadService.findAll();

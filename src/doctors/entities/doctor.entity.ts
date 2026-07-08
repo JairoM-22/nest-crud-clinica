@@ -1,5 +1,6 @@
 import { Especialista } from "../../especialista/entities/especialista.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Cita } from "../../citas/entities/cita.entity";
 
 @Entity({ name: 'doctor' })
 export class Doctor {
@@ -33,4 +34,7 @@ export class Doctor {
         { cascade: true }
     ) 
     especialista: Especialista[]
+
+    @OneToMany(() => Cita, (cita) => cita.doctor)
+    citas: Cita[]
 }

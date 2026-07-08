@@ -12,6 +12,26 @@ export class DoctorsController {
     return this.doctorsService.create(createDoctorDto);
   }
 
+  @Get('citas')
+  getCitas() {
+    return this.doctorsService.getCitas();
+  }
+
+  @Get('estadisticas')
+  getEstadisticas() {
+    return this.doctorsService.getEstadisticas();
+  }
+
+  @Get('citas-sobre-promedio')
+  getCitasSobrePromedio() {
+    return this.doctorsService.getCitasSobrePromedio();
+  }
+
+  @Get('especialidad')
+  getDoctoresPorEspecialidad() {
+    return this.doctorsService.getDoctoresPorEspecialidad();
+  }
+
   @Get()
   findAll() {
     return this.doctorsService.findAll();

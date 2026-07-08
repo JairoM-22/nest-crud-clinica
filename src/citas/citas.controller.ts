@@ -12,6 +12,16 @@ export class CitasController {
     return this.citasService.create(createCitaDto);
   }
 
+  @Get('pendiente')
+  getPendientes() {
+    return this.citasService.getPendientes();
+  }
+
+  @Get('marzo/control')
+  getMarzoControl() {
+    return this.citasService.getMarzoControl();
+  }
+
   @Get()
   findAll() {
     return this.citasService.findAll();
