@@ -223,6 +223,18 @@ export class SeedService {
         (30, 25, 'Naproxeno', '500mg', 'Tomar una tableta cada 8-12 horas con alimentos', '2024-03-25 15:30:00')
       `);
 
+      // 8. Reset Sequences for all seeded tables
+      const tables = ['paciente', 'especialidad', 'doctor', 'especialista', 'cita', 'receta'];
+      for (const table of tables) {
+        const result = await this.dataSource.query(`SELECT MAX(id) as max FROM "${table}"`);
+        const max = result[0].max || 0;
+        try {
+          await this.dataSource.query(`ALTER SEQUENCE "${table}_id_seq" RESTART WITH ${max + 1}`);
+        } catch (e) {
+          console.warn(`Could not restart sequence for ${table}:`, e.message);
+        }
+      }
+
       return { message: 'Database successfully seeded!' };
     } catch (error) {
       throw error;

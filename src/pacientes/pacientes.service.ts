@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePacienteDto } from './dto/create-paciente.dto';
@@ -11,48 +11,42 @@ export class PacientesService {
     @InjectRepository(Paciente)
     private readonly pacienteRepository: Repository<Paciente>,
   ) {}
-  create(createPacienteDto: CreatePacienteDto) {
-    return 'This action adds a new paciente';
+  async create(createPacienteDto: CreatePacienteDto) {
+      const paciente = this.pacienteRepository.create(createPacienteDto)
+      return await this.pacienteRepository.save(paciente)
   }
 
-  findAll() {
-    return `This action returns all pacientes`;
+  async findAll() {
+    return this.pacienteRepository.find() ;
   }
 
   async getTop5() {
     return await this.pacienteRepository
-      .createQueryBuilder('paciente')
-      .select([
-        'paciente.nombre',
-        'paciente.correo',
-        'paciente.fechaRegistro',
-      ])
-      .orderBy('paciente.fechaRegistro', 'DESC')
-      .take(5)
-      .getMany();
+      .createQueryBuilder('paciente').select(['paciente.nombre','paciente.correo','paciente.fechaRegistro',]).orderBy('paciente.fechaRegistro', 'DESC').take(5).getMany();
   }
 
   async getSinCita() {
-    return await this.pacienteRepository
-      .createQueryBuilder('paciente')
-      .leftJoin('paciente.citas', 'cita')
-      .where('cita.id IS NULL')
-      .select([
-        'paciente.id',
-        'paciente.nombre',
-      ])
-      .getMany();
+    return await this.pacienteRepository.createQueryBuilder('paciente').leftJoin('paciente.citas', 'cita')
+      .where('cita.id IS NULL').select(['paciente.id','paciente.nombre',]).getMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} paciente`;
+  async findOne(id: number) {
+  return await this.pacienteRepository.findOne({where: { id },});
+}
+
+ async update(id: number, updatePacienteDto: UpdatePacienteDto) {
+    const paciente = await this.pacienteRepository.preload({id,...updatePacienteDto})
+    if (!paciente){
+        throw new NotFoundException(`Paciente ${id} no encontrado`);
+    }
+    return await this.pacienteRepository.save(paciente)
   }
 
-  update(id: number, updatePacienteDto: UpdatePacienteDto) {
-    return `This action updates a #${id} paciente`;
-  }
+ async remove(id: number) {
+    await this.pacienteRepository.delete(id);
 
-  remove(id: number) {
-    return `This action removes a #${id} paciente`;
+  return {
+    message: 'Doctor eliminado',
+  };
   }
 }
