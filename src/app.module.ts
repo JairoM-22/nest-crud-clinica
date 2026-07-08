@@ -7,6 +7,7 @@ import { DoctorsModule } from './doctors/doctors.module';
 import { EspecialidadModule } from './especialidad/especialidad.module';
 import { RecetasModule } from './recetas/recetas.module';
 import { EspecialistaModule } from './especialista/especialista.module';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [ConfigModule.forRoot(),
@@ -33,7 +34,9 @@ import { EspecialistaModule } from './especialista/especialista.module';
 
     RecetasModule,
 
-    EspecialistaModule
+    EspecialistaModule,
+
+    SeedModule
   ]
 })
 export class AppModule {}
