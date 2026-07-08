@@ -27,7 +27,7 @@ export class EspecialistaService {
   }
 
   findAll() {
-    return `This action returns all especialista`;
+    return this.especialistaRepository.find();
   }
 
   findOne(id: number) {

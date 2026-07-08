@@ -28,7 +28,7 @@ export class DoctorsService {
     }
 
   findAll() {
-    return `This action returns all doctors`;
+    return this.doctorRepository.find();
   }
 
   async getCitas() {
