@@ -2,19 +2,22 @@ import { IsEmail, IsInt, IsOptional, IsString, MinLength } from 'class-validator
 
 export class CreateDoctorDto {
 
-    @IsString()
-    @MinLength(1)
-    nombre!: string;
+        @IsInt()
+        id!: number;
 
-    @IsEmail()
-    @IsOptional()
-    correo?: string;
+        @IsString()
+        @MinLength(1)
+        nombre!: string;
 
-    @IsString()
-    @IsOptional()
-    telefono?: string;
+        @IsEmail()
+        @IsOptional()
+        correo!: string;
 
-    @IsInt()
-    @IsOptional()
-    numero_consultorio?: number;
+        @IsString()
+        @IsOptional()
+        telefono?: string;
+
+        @IsString()
+        @IsOptional()
+        numero_consultorio?: string;
 }

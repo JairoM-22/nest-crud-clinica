@@ -26,7 +26,7 @@ export class Doctor {
     @Column('text', {
         unique: true,
     })
-    numero_consultorio!: number;
+    numero_consultorio!: string;
 
     @OneToMany(
         () => Especialista,
