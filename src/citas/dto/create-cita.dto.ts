@@ -1,4 +1,4 @@
-import { IsDate, IsEnum, IsInt, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsDate, IsDateString, IsEnum, IsInt, IsNumber, IsOptional, IsString } from "class-validator";
 import { cita_estado } from "../entities/cita_estado.enum";
 
 
@@ -17,7 +17,7 @@ export class CreateCitaDto {
     doctor_id?:number;
 
     @IsOptional()
-    @IsDate()
+    @IsDateString()
     fecha?: Date;
 
     @IsOptional()
