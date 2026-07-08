@@ -1,13 +1,9 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { CreateCitaDto } from './dto/create-cita.dto';
 import { UpdateCitaDto } from './dto/update-cita.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cita } from './entities/cita.entity';
 import { Repository } from 'typeorm';
-import { Cita } from './entities/cita.entity';
 
 @Injectable()
 export class CitasService {
@@ -32,6 +28,21 @@ export class CitasService {
   findAll() {
     return `This action returns all citas`;
   }
+
+  findOne(id: number) {
+    return this.citaRepository.findOne({where: {id}});
+  }
+
+  update(id: number, updateCitaDto: UpdateCitaDto) {
+    return `This action updates a #${id} cita`;
+  }
+
+  remove(id: number) {
+    return `This action removes a #${id} cita`;
+  }
+
+
+
 
   async getPendientes() {
     return await this.citaRepository
@@ -63,15 +74,4 @@ export class CitasService {
       .getMany();
   }
 
-  findOne(id: number) {
-    return this.citaRepository.findOne({where: {id}});
-  }
-
-  update(id: number, updateCitaDto: UpdateCitaDto) {
-    return `This action updates a #${id} cita`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} cita`;
-  }
 }
