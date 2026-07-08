@@ -41,7 +41,7 @@ export class Cita {
     })
     recetas!: Receta[];
 
-    @ManyToOne(() => Doctor, (doctor) => doctor.especialista, {
+    @ManyToOne(() => Doctor, (doctor) => doctor.citas, {
         eager: true,
     })
     @JoinColumn({ name: 'doctor_id' })

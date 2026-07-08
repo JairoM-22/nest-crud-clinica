@@ -27,6 +27,11 @@ export class RecetasController {
     return this.recetasService.update(+id, updateRecetaDto);
   }
 
+  @Delete('citas-canceladas')
+  removeCitasCanceladas() {
+    return this.recetasService.removeCitasCanceladas();
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.recetasService.remove(+id);

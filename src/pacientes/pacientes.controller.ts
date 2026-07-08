@@ -12,6 +12,16 @@ export class PacientesController {
     return this.pacientesService.create(createPacienteDto);
   }
 
+  @Get('top-5')
+  getTop5() {
+    return this.pacientesService.getTop5();
+  }
+
+  @Get('sin-cita')
+  getSinCita() {
+    return this.pacientesService.getSinCita();
+  }
+
   @Get()
   findAll() {
     return this.pacientesService.findAll();
