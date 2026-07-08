@@ -101,7 +101,7 @@ const ENTITIES = {
       {
         name: "numero_consultorio",
         label: "Número de consultorio",
-        type: "number",
+        type: "text",
         required: true,
       },
     ],
