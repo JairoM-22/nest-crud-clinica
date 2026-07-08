@@ -14,11 +14,6 @@ export class CitasService {
 
   constructor(
     @InjectRepository(Cita)
-    private readonly citaRepository: Repository<Cita>
-  ){}
-  
-  constructor(
-    @InjectRepository(Cita)
     private readonly citaRepository: Repository<Cita>,
   ) {}
   create(createCitaDto: CreateCitaDto) {
