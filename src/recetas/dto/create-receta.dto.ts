@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateRecetaDto {
   @IsInt()
@@ -16,4 +16,8 @@ export class CreateRecetaDto {
   @IsOptional()
   @IsString()
   instruccion?: string;
+
+  @IsOptional()
+  @IsDateString()
+  fecha_emision?: string;
 }
