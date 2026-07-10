@@ -39,12 +39,25 @@ export class DoctorsService {
   }
 
   async getEstadisticas() {
-    return await this.doctorRepository
-      .createQueryBuilder('doctor').leftJoin('doctor.citas', 'cita').leftJoin('cita.recetas', 'receta')
-      .select(['doctor.id', 'doctor.nombre',]).addSelect('COUNT(receta.id)', 'totalRecetas')
-      .addSelect('AVG(receta.id)', 'promedioRecetas').addSelect('MAX(cita.fecha)', 'ultimaCita')
-      .groupBy('doctor.id').getRawMany();
-  }
+  return this.doctorRepository
+    .createQueryBuilder('doctor')
+    .leftJoin('doctor.citas', 'cita')
+    .leftJoin('cita.recetas', 'receta')
+    .select([
+      'doctor.id AS doctor_id',
+      'doctor.nombre AS nombre_doctor',
+    ])
+    .addSelect('COUNT(DISTINCT cita.id)', 'total_citas')
+    .addSelect('COUNT(receta.id)', 'total_medicamentos')
+    .addSelect(
+      'ROUND(COUNT(receta.id)::numeric / NULLIF(COUNT(DISTINCT cita.id),0),2)',
+      'promedio_medicamentos_por_cita',
+    )
+    .addSelect('MAX(cita.fecha)', 'ultima_cita')
+    .groupBy('doctor.id')
+    .addGroupBy('doctor.nombre')
+    .getRawMany();
+}
 
   async getCitasSobrePromedio() {
     const subQuery = this.doctorRepository.manager.getRepository(Cita)
@@ -64,9 +77,17 @@ export class DoctorsService {
   }
 
   async getDoctoresPorEspecialidad() {
-    return await this.doctorRepository
-      .createQueryBuilder('doctor').leftJoin('doctor.especialista', 'especialista').leftJoin('especialista.especialidad', 'especialidad').select(['doctor.id', 'doctor.nombre', 'especialidad.id', 'especialidad.nombre',])
-      .getMany();
+    return this.doctorRepository
+  .createQueryBuilder('doctor')
+  .leftJoin('doctor.especialista', 'especialista')
+  .leftJoin('especialista.especialidad', 'especialidad')
+  .select([
+    'doctor.id',
+    'doctor.nombre',
+    'especialidad.id',
+    'especialidad.nombre',
+  ])
+  .getRawMany();
   }
 
   findOne(id: number) {

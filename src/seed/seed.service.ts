@@ -230,7 +230,7 @@ export class SeedService {
         const max = result[0].max || 0;
         try {
           await this.dataSource.query(`ALTER SEQUENCE "${table}_id_seq" RESTART WITH ${max + 1}`);
-        } catch (e) {
+        } catch (e :any) {
           console.warn(`Could not restart sequence for ${table}:`, e.message);
         }
       }
